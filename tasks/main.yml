@@ -5,7 +5,7 @@
 
 # Create the directory tree
 - name: Create configuration directory
-  file:
+  ansible.builtin.file:
     path: "{{ traefik_path }}"
     state: directory
     owner: "{{ ansible_user }}"
@@ -13,7 +13,7 @@
     mode: '0750'
 
 - name: "Copy configuration file"
-  template:
+  ansible.builtin.template:
     src: traefik.yml.j2
     dest: "{{ traefik_path }}/traefik.yml"
     owner: "{{ ansible_user }}"
@@ -23,7 +23,7 @@
 
 # Docker-compose configuration
 - name: Setup docker-compose file
-  template:
+  ansible.builtin.template:
     src: docker-compose.yml.j2
     dest: "{{ traefik_path }}/docker-compose.yml"
     owner: "{{ ansible_user }}"
@@ -55,7 +55,7 @@
 # it is actually running. We need to ensure it is running in case you
 # run the task after nothing has been changed by the container was stopped.
 - name: Flush handlers
-  meta: flush_handlers
+  ansible.builtin.meta: flush_handlers
 
 - name: Ensure the traefik server is running
   community.docker.docker_compose:
