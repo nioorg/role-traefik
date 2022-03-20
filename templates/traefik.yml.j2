@@ -1,0 +1,26 @@
+## STATIC CONFIGURATION
+log:
+  level: {{ traefik.log_level }}
+
+api:
+  insecure: true
+  dashboard: true
+
+entryPoints:
+{% for entrypoint in traefik.entrypoints %}
+  {{ entrypoint.name }}:
+    address: ":{{ entrypoint.port }}"
+{% if entrypoint.redirect is defined %}
+    http:
+      redirections:
+        entryPoint:
+          to: {{ entrypoint.redirect }}
+          scheme: https
+          permanent: true
+{% endif %}
+{% endfor %}
+
+providers:
+  docker:
+    endpoint: "unix:///var/run/docker.sock"
+    exposedByDefault: false

@@ -1,0 +1,23 @@
+version: "3"
+
+services:
+
+  # More info at https://doc.traefik.io/traefik/user-guides/docker-compose/basic-example/
+  # TLS: https://traefik.io/blog/traefik-2-tls-101-23b4fbee81f1/
+  traefik:
+    restart: unless-stopped
+    image: "{{ traefik.image }}"
+    # TODO: certificates resolver
+    # command:
+    #   - "--certificatesresolvers.myresolver.acme.tlschallenge=true"
+    #   #- "--certificatesresolvers.myresolver.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory"
+    #   - "--certificatesresolvers.myresolver.acme.email=postmaster@example.com"
+    #   - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
+    ports:
+{% for entrypoint in traefik.entrypoints %}
+      - "{{ entrypoint.port }}:{{ entrypoint.port }}"
+{% endfor %}
+      - "{{ traefik.api_port }}:8080" # TODO explicit location instead of "insecure: true"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "{{ traefik_path }}/traefik.yml:/traefik.yml:ro"

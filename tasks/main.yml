@@ -1,0 +1,63 @@
+---
+# TODO
+
+# TODO auth middleware: https://github.com/DoTheEvo/Traefik-v2-examples#3-middlewares
+
+# Create the directory tree
+- name: Create configuration directory
+  file:
+    path: "{{ traefik_path }}"
+    state: directory
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: '0750'
+
+- name: "Copy configuration file"
+  template:
+    src: traefik.yml.j2
+    dest: "{{ traefik_path }}/traefik.yml"
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: '0640'
+  notify: restart docker traefik
+
+# Docker-compose configuration
+- name: Setup docker-compose file
+  template:
+    src: docker-compose.yml.j2
+    dest: "{{ traefik_path }}/docker-compose.yml"
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: '0640'
+  notify: restart docker traefik
+
+# Allow traffic to traefik
+- name: UFW - Allow connections to traefik
+  ufw:
+    rule: allow
+    port: "{{ item.1.port }}"
+    src: '{{ item.0 }}'
+  with_items:
+    - "{{ traefik_listening | product(traefik.entrypoints) | list }}"
+  become: true
+
+- name: UFW - Allow connections to the traefik web interface
+  ufw:
+    rule: allow
+    port: "{{ traefik.api_port }}"
+    src: "{{ item }}"
+  with_items:
+    - "{{ traefik_listening }}"
+  become: true
+
+# Execute all the actions of the handlers that have been notified.
+# It allows the container to restart or build itself before ensuring that
+# it is actually running. We need to ensure it is running in case you
+# run the task after nothing has been changed by the container was stopped.
+- name: Flush handlers
+  meta: flush_handlers
+
+- name: Ensure the traefik server is running
+  community.docker.docker_compose:
+    project_src: "{{ traefik_path }}"
+  become: true
