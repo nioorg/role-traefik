@@ -12,7 +12,7 @@ services:
 {% for entrypoint in traefik.entrypoints %}
       - "{{ entrypoint.port }}:{{ entrypoint.port }}"
 {% endfor %}
-      - "{{ traefik.api_port }}:8080" # TODO explicit location instead of "insecure: true"
+      - "{{ traefik.api_port }}:8080"
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
       - "{{ traefik_path }}/traefik.yml:/traefik.yml:ro"
