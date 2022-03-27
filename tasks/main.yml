@@ -6,11 +6,14 @@
 # Create the directory tree
 - name: Create configuration directory
   ansible.builtin.file:
-    path: "{{ traefik_path }}"
+    path: "{{ item }}"
     state: directory
     owner: "{{ ansible_user }}"
     group: "{{ ansible_user }}"
     mode: '0750'
+  loop:
+    - "{{ traefik_path }}"
+    - "{{ traefik_path }}/conf.d"
 
 - name: "Copy configuration file"
   ansible.builtin.template:
