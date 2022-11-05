@@ -6,7 +6,7 @@ traefik_listening:
   - 0.0.0.0/0
 
 traefik:
-  image: "traefik:v2.6"
+  image: "traefik:latest"
   log_level: INFO
   entrypoints:
     - name: web
@@ -14,7 +14,7 @@ traefik:
       redirect: websecure
     - name: websecure
       port: 443
-  api_port: 8080
+  dashboard: true
   # certificates:
   #   - cert: /path/to/domain.cert
   #     key: /path/to/domain.key
