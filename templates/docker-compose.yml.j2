@@ -5,9 +5,9 @@ services:
   # More info at https://doc.traefik.io/traefik/user-guides/docker-compose/basic-example/
   traefik:
     restart: unless-stopped
-    image: "{{ traefik.image }}"
+    image: "{{ traefik_image }}"
     ports:
-{% for entrypoint in traefik.entrypoints %}
+{% for entrypoint in traefik_entrypoints %}
       - "{{ entrypoint.port }}:{{ entrypoint.port }}"
 {% endfor %}
     # Allow traefik to connect to all the container exposed on the following bridge network

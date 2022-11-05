@@ -3,16 +3,16 @@ global:
   sendAnonymousUsage: false
 
 log:
-  level: {{ traefik.log_level }}
+  level: {{ traefik_log_level }}
 
 serversTransport:
   insecureSkipVerify: true
 
 api:
-  dashboard: {{ traefik.dashboard | lower }}
+  dashboard: {{ traefik_dashboard | lower }}
 
 entryPoints:
-{% for entrypoint in traefik.entrypoints %}
+{% for entrypoint in traefik_entrypoints %}
   {{ entrypoint.name }}:
     address: ":{{ entrypoint.port }}"
 {% if entrypoint.redirect is defined %}
@@ -35,10 +35,10 @@ providers:
     network: traefik_proxy
 
 tls:
-{% if traefik.certificates is defined and traefik.certificates|length > 0 %}
+{% if traefik_certificates is defined and traefik_certificates|length > 0 %}
   # Use existing self-signed certificates
   certificates:
-{% for certificate in traefik.certificates %}
+{% for certificate in traefik_certificates %}
     - certFile: "{{ certificate.cert }}"
       keyFile: "{{ certificate.key }}"
 {% endfor %}
@@ -48,8 +48,8 @@ tls:
       minVersion: VersionTLS12
     mintls13:
       minVersion: VersionTLS13
-{% if traefik.client_auth is defined %}
-{% for client_auth in traefik.client_auth %}
+{% if traefik_client_auth is defined %}
+{% for client_auth in traefik_client_auth %}
     # mTLS configuration for {{ client_auth.name }}
     {{ client_auth.name }}:
       clientAuth:
@@ -62,14 +62,14 @@ tls:
 {% endfor %}
 {% endif %}
 
-{% if traefik.certificatesResolvers.letsencrypt.enabled %}
+{% if traefik_certificates_resolvers.letsencrypt.enabled %}
 certificatesResolvers:
   default:
     acme:
-      email: "{{ traefik.certificatesResolvers.letsencrypt.email }}"
-      caServer: "{{ traefik.certificatesResolvers.letsencrypt.ca_server }}"
+      email: "{{ traefik_certificates_resolvers.letsencrypt.email }}"
+      caServer: "{{ traefik_certificates_resolvers.letsencrypt.ca_server }}"
       storage: "/etc/traefik/acme.json"
       httpChallenge:
         # used during the challenge
-        entryPoint: "{{ traefik.certificatesResolvers.letsencrypt.http_challenge.entrypoint }}"
+        entryPoint: "{{ traefik_certificates_resolvers.letsencrypt.http_challenge.entrypoint }}"
 {% endif %}

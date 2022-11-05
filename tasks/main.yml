@@ -27,7 +27,7 @@
     owner: "{{ ansible_user }}"
     group: "{{ ansible_user }}"
     mode: '0640'
-  when: traefik.dashboard is true
+  when: traefik_dashboard is true
 
 # Docker-compose configuration
 - name: Setup docker-compose file
@@ -46,7 +46,7 @@
     port: "{{ item.1.port }}"
     src: '{{ item.0 }}'
   with_items:
-    - "{{ traefik_listening | product(traefik.entrypoints) | list }}"
+    - "{{ traefik_listening | product(traefik_entrypoints) | list }}"
   become: true
 
 # Execute all the actions of the handlers that have been notified.
