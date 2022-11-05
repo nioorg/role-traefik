@@ -5,6 +5,9 @@ global:
 log:
   level: {{ traefik.log_level }}
 
+serversTransport:
+  insecureSkipVerify: true
+
 api:
   dashboard: {{ traefik.dashboard | lower }}
 
@@ -29,6 +32,7 @@ providers:
   docker:
     endpoint: "unix:///var/run/docker.sock"
     exposedByDefault: false
+    network: traefik_proxy
 
 tls:
 {% if traefik.certificates is defined and traefik.certificates|length > 0 %}

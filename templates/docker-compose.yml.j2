@@ -6,14 +6,18 @@ services:
   traefik:
     restart: unless-stopped
     image: "{{ traefik.image }}"
-    # Allow traefik to connect to all the container exposed on the default bridge network
-    network_mode: "bridge"
     ports:
 {% for entrypoint in traefik.entrypoints %}
       - "{{ entrypoint.port }}:{{ entrypoint.port }}"
 {% endfor %}
-      - "{{ traefik.api_port }}:8080"
+    # Allow traefik to connect to all the container exposed on the following bridge network
+    networks:
+      - proxy
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
       - "{{ traefik_path }}/traefik.yml:/traefik.yml:ro"
-      - "{{ traefik_path }}/conf.d:/etc/traefik/conf.d:ro"
+      - "{{ traefik_path }}/conf.d/:/etc/traefik/conf.d/"
+
+networks:
+  proxy:
+    driver: bridge
