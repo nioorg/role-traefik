@@ -41,7 +41,7 @@
 
 # Allow traffic to traefik
 - name: UFW - Allow connections to traefik
-  ufw:
+  community.general.ufw:
     rule: allow
     port: "{{ item.1.port }}"
     src: '{{ item.0 }}'
