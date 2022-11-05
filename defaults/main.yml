@@ -31,3 +31,4 @@ traefik:
       ca_server: https://acme-v02.api.letsencrypt.org/directory
       http_challenge:
         entrypoint: web
+traefik_hostname: "traefik.{{ inventory_hostname }}"

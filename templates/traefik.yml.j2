@@ -6,8 +6,7 @@ log:
   level: {{ traefik.log_level }}
 
 api:
-  insecure: true
-  dashboard: true
+  dashboard: {{ traefik.dashboard | lower }}
 
 entryPoints:
 {% for entrypoint in traefik.entrypoints %}
@@ -25,7 +24,7 @@ entryPoints:
 
 providers:
   file:
-    directory: "/etc/traefik/conf.d/"
+    directory: "/etc/traefik/conf.d"
     watch: true
   docker:
     endpoint: "unix:///var/run/docker.sock"

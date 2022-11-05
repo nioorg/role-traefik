@@ -20,6 +20,15 @@
     mode: '0640'
   notify: restart docker traefik
 
+- name: "Copy dashboard configuration"
+  ansible.builtin.template:
+    src: traefik_dashboard.yml.j2
+    dest: "{{ traefik_path }}/conf.d/traefik_dashboard.yml"
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: '0640'
+  when: traefik.dashboard is true
+
 # Docker-compose configuration
 - name: Setup docker-compose file
   ansible.builtin.template:
@@ -38,15 +47,6 @@
     src: '{{ item.0 }}'
   with_items:
     - "{{ traefik_listening | product(traefik.entrypoints) | list }}"
-  become: true
-
-- name: UFW - Allow connections to the traefik web interface
-  ufw:
-    rule: allow
-    port: "{{ traefik.api_port }}"
-    src: "{{ item }}"
-  with_items:
-    - "{{ traefik_listening }}"
   become: true
 
 # Execute all the actions of the handlers that have been notified.
