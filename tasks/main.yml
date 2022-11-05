@@ -18,7 +18,7 @@
     owner: "{{ ansible_user }}"
     group: "{{ ansible_user }}"
     mode: '0640'
-  notify: restart docker traefik
+  notify: Restart docker traefik
 
 - name: "Copy dashboard configuration"
   ansible.builtin.template:
@@ -37,7 +37,7 @@
     owner: "{{ ansible_user }}"
     group: "{{ ansible_user }}"
     mode: '0640'
-  notify: restart docker traefik
+  notify: Restart docker traefik
 
 # Allow traffic to traefik
 - name: UFW - Allow connections to traefik
