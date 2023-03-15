@@ -1,5 +1,5 @@
 ---
-- name: restart docker traefik
+- name: Restart docker traefik
   community.docker.docker_compose:
     project_src: "{{ traefik_path }}"
     restarted: true
