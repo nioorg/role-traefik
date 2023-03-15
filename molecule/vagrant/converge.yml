@@ -4,11 +4,11 @@
   roles:
     - role: common
     - role: pip
-      become: yes
+      become: true
       vars:
         pip_install_packages:
           - name: docker
           - name: docker-compose
     - role: docker
-      become: yes
+      become: true
     - role: traefik

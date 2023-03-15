@@ -5,7 +5,6 @@ traefik_path: "/home/{{ ansible_user }}/traefik"
 traefik_listening:
   - 0.0.0.0/0
 
-traefik:
 traefik_image: "traefik:latest"
 traefik_log_level: INFO
 traefik_entrypoints:
