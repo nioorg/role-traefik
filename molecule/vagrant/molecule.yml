@@ -31,6 +31,7 @@ provisioner:
         user_accounts:
           - username: user2
           - username: user3
+        base_domain: "{{ inventory_hostname }}"
 verifier:
   name: ansible
 lint: |
