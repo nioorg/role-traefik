@@ -10,6 +10,7 @@
   loop:
     - "{{ traefik_path }}"
     - "{{ traefik_path }}/conf.d"
+  become: true
 
 - name: "Copy configuration file"
   ansible.builtin.template:
