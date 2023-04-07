@@ -1,0 +1,13 @@
+---
+- name: Prepare
+  hosts: all
+  roles:
+    - role: common
+    - role: pip
+      become: true
+      vars:
+        pip_install_packages:
+          - name: docker
+          - name: docker-compose
+    - role: docker
+      become: true
