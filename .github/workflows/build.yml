@@ -38,7 +38,7 @@ jobs:
 
   molecule:
     name: Molecule
-    runs-on: macos-10.15
+    runs-on: macos-latest
 
     strategy:
       matrix:

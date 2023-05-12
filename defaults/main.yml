@@ -32,4 +32,9 @@ traefik_certificates_resolvers:
     ca_server: https://acme-v02.api.letsencrypt.org/directory
     http_challenge:
       entrypoint: web
+    # dns_challenge:
+    #   provider: TODO-cloudflare
+    #   api_keys:
+    #     - name: CF_DNS_API_TOKEN
+    #       value: TODO-cloudflare-token
 traefik_hostname: "traefik.{{ base_domain }}"

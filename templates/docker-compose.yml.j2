@@ -13,6 +13,12 @@ services:
     # Allow traefik to connect to all the container exposed on the following bridge network
     networks:
       - proxy
+    environment:
+{% if traefik_certificates_resolvers.letsencrypt.dns_challenge is defined %}
+{% for apikey in traefik_certificates_resolvers.letsencrypt.dns_challenge.api_keys %}
+      - "{{ apikey.name }}={{ apikey.value }}"
+{% endfor %}
+{% endif %}
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
       - "{{ traefik_path }}/traefik.yml:/traefik.yml:ro"
