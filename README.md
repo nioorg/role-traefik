@@ -36,7 +36,7 @@ All varibales are optional.
 The following is the list of the available variables and its default values:
 
 ```yaml
-traefik_path: "/home/{{ ansible_user }}/traefik"
+traefik_path: "/opt/traefik"
 # List of subnets the server will be listening on.
 # By default it listens for connections from everywhere.
 traefik_listening:
@@ -70,6 +70,11 @@ traefik_certificates_resolvers:
     ca_server: https://acme-v02.api.letsencrypt.org/directory
     http_challenge:
       entrypoint: web
+    # dns_challenge:
+    #   provider: TODO-cloudflare
+    #   api_keys:
+    #     - name: CF_DNS_API_TOKEN
+    #       value: TODO-cloudflare-token
 traefik_hostname: "traefik.{{ inventory_hostname }}"
 ```
 
