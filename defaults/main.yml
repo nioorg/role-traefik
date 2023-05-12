@@ -37,4 +37,4 @@ traefik_certificates_resolvers:
     #   api_keys:
     #     - name: CF_DNS_API_TOKEN
     #       value: TODO-cloudflare-token
-traefik_hostname: "traefik.{{ inventory_hostname }}"
+traefik_hostname: "traefik.{{ base_domain }}"
