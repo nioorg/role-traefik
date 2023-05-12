@@ -1,5 +1,5 @@
 ansible
-molecule
+molecule==5.0.0
 molecule-vagrant
 yamllint
 ansible-lint
