@@ -62,36 +62,37 @@ tls:
 {% endfor %}
 {% endif %}
 
-{% if traefik_certificates_resolvers.letsencrypt.enabled %}
+{% if traefik_certificates_resolvers is defined and traefik_certificates_resolvers|length > 0 %}
 certificatesResolvers:
-  default:
+{% for resolver_name, resolver_conf in traefik_certificates_resolvers %}
+  {{ resolver_name }}:
     acme:
-      email: "{{ traefik_certificates_resolvers.letsencrypt.email }}"
-      caServer: "{{ traefik_certificates_resolvers.letsencrypt.ca_server }}"
+      email: "{{ resolver_conf.email }}"
+      caServer: "{{ resolver_conf.ca_server }}"
       storage: "/etc/traefik/acme.json"
-{% if traefik_certificates_resolvers.letsencrypt.http_challenge is defined %}
+{% if resolver_conf.http_challenge is defined %}
       # Use a HTTP-01 ACME challenge.
       httpChallenge:
         # EntryPoint to use for the HTTP-01 challenges.
-        entryPoint: "{{ traefik_certificates_resolvers.letsencrypt.http_challenge.entrypoint }}"
+        entryPoint: "{{ resolver_conf.http_challenge.entrypoint }}"
 {% endif %}
-{% if traefik_certificates_resolvers.letsencrypt.dns_challenge is defined %}
+{% if resolver_conf.dns_challenge is defined %}
       # Use a DNS-01 ACME challenge rather than HTTP-01 challenge.
       # Note: mandatory for wildcard certificate generation.
       dnsChallenge:
         # DNS provider used.
-        provider: "{{ traefik_certificates_resolvers.letsencrypt.dns_challenge.provider }}"
+        provider: "{{ resolver_conf.dns_challenge.provider }}"
         # By default, the provider will verify the TXT DNS challenge record before letting ACME verify.
         # If delayBeforeCheck is greater than zero, this check is delayed for the configured duration in seconds.
         # Useful if internal networks block external DNS queries.
-        delayBeforeCheck: {{ traefik_certificates_resolvers.letsencrypt.dns_challenge.delayBeforeCheck | default(0) }}
+        delayBeforeCheck: {{ resolver_conf.dns_challenge.delayBeforeCheck | default(0) }}
         # Use following DNS servers to resolve the FQDN authority. Example:
         # - "1.1.1.1:53"
         # - "8.8.8.8:53"
-        resolvers: {{ traefik_certificates_resolvers.letsencrypt.dns_challenge.resolvers | default([]) }}
+        resolvers: {{ resolver_conf.dns_challenge.resolvers | default([]) }}
 
         # Disable the DNS propagation checks before notifying ACME that the DNS challenge is ready.
         # NOT RECOMMENDED: Increase the risk of reaching Let's Encrypt's rate limits.
-        disablePropagationCheck: "{{ traefik_certificates_resolvers.letsencrypt.dns_challenge.disablePropagationCheck | default('false') }}"
+        disablePropagationCheck: "{{ resolver_conf.dns_challenge.disablePropagationCheck | default('false') }}"
 {% endif %}
 {% endif %}
