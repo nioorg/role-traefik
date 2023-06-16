@@ -64,7 +64,7 @@ tls:
 
 {% if traefik_certificates_resolvers is defined and traefik_certificates_resolvers|length > 0 %}
 certificatesResolvers:
-{% for resolver_name, resolver_conf in traefik_certificates_resolvers %}
+{% for resolver_name, resolver_conf in traefik_certificates_resolvers.items() %}
   {{ resolver_name }}:
     acme:
       email: "{{ resolver_conf.email }}"
